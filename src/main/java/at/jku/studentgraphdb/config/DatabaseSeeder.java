@@ -32,13 +32,21 @@ public class DatabaseSeeder implements ApplicationRunner {
                     .single().get("c").asLong();
             if (studentCount > 0) {
                 log.info("Database already seeded ({} students found). Skipping.", studentCount);
-                return;
+            } else {
+                seedDatabase(session);
             }
 
-            log.info("Seeding Neo4j database...");
+            log.info("View the the project at http://localhost:8080");
+            log.info("View the neo4j browser at http://localhost:7474/browser/");
+            log.info("Password is secret123");
+        }
+    }
 
-            // Students
-            session.run("""
+    private void seedDatabase(Session session) {
+        log.info("Seeding Neo4j database...");
+
+        // Students
+        session.run("""
                 CREATE
                   (s1:Student {name: 'Luca',   matriculationNumber: 'k12355001'}),
                   (s2:Student {name: 'Elvin',  matriculationNumber: 'k12355002'}),
@@ -50,8 +58,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s8:Student {name: 'Robin',  matriculationNumber: 'k12355008'})
                 """);
 
-            // Professors
-            session.run("""
+        // Professors
+        session.run("""
                 CREATE
                   (p1:Professor {name: 'Josef',    employeeNumber: 'ak110001'}),
                   (p2:Professor {name: 'Rene',     employeeNumber: 'ak110002'}),
@@ -64,8 +72,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (p9:Professor {name: 'Stefan',   employeeNumber: 'ak110009'})
                 """);
 
-            // Lectures
-            session.run("""
+        // Lectures
+        session.run("""
                 CREATE
                   (:Lecture {topic: 'Information Systems 1',       id: '351.011', ects: 3}),
                   (:Lecture {topic: 'Introduction to IT Security', id: '353.067', ects: 3}),
@@ -77,8 +85,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (:Lecture {topic: 'Multimedia Systems',          id: '367.060'})
                 """);
 
-            // TEACHES
-            session.run("""
+        // TEACHES
+        session.run("""
                 MATCH (p1:Professor {name:'Josef'}),   (l1:Lecture {id:'351.011'})
                 MATCH (p4:Professor {name:'Wolfram'}), (l1b:Lecture{id:'351.011'})
                 MATCH (p2:Professor {name:'Rene'}),    (l2:Lecture {id:'353.067'})
@@ -104,8 +112,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (p8) -[:TEACHES {order:1, term:'SS26'}]->(l8)
                 """);
 
-            // Professor -> Examines -> Exam
-            session.run("""
+        // Professor -> Examines -> Exam
+        session.run("""
                 MATCH (l1:Lecture{id:'351.011'})
                 MATCH (p1:Professor{name:'Josef'}),
                       (p4:Professor{name:'Wolfram'}),
@@ -118,12 +126,12 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (p1)-[:EXAMINES]->(e5:Exam{date:'2026-04-18', note:'Second exam',           room:'HS 1' })<-[:HAS_EXAM]-(l1)
                 """);
 
-            session.run("""
+        session.run("""
                 MATCH (l2:Lecture{id:'353.067'}), (p2:Professor{name:'Rene'})
                 CREATE (p2)-[:EXAMINES]->(e:Exam{date:'2026-03-30', room:'S3 055'})<-[:HAS_EXAM]-(l2)
                 """);
 
-            session.run("""
+        session.run("""
                 MATCH (l3:Lecture{id:'353.006'})
                 MATCH (p2:Professor{name:'Rene'}), (p7:Professor{name:'Michael'})
                 CREATE
@@ -133,39 +141,39 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (p7)-[:EXAMINES]->(ed:Exam{date:'2026-01-18', note:'First exam room 4', room:'HS 9' })<-[:HAS_EXAM]-(l3)
                 """);
 
-            session.run("""
+        session.run("""
                 MATCH (l4:Lecture{id:'336.058'}), (p6:Professor{name:'Richard'})
                 CREATE (p6)-[:EXAMINES]->(e:Exam{date:'2026-02-06', room:'HS 7'})<-[:HAS_EXAM]-(l4)
                 """);
 
-            session.run("""
+        session.run("""
                 MATCH (l5:Lecture{id:'351.039'}), (p1:Professor{name:'Josef'})
                 CREATE (p1)-[:EXAMINES]->(e:Exam{date:'2026-06-26'})<-[:HAS_EXAM]-(l5)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (l6:Lecture{id:'338.010'}), (p3:Professor{name:'Martina'})
                 CREATE (p3)-[:EXAMINES]->(e:Exam{date:'2026-06-30'})<-[:HAS_EXAM]-(l6)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (l7:Lecture{id:'336.001'}), (p6:Professor{name:'Richard'})
                 CREATE (p6)-[:EXAMINES]->(e:Exam{date:'2026-06-30'})<-[:HAS_EXAM]-(l7)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (l8:Lecture{id:'367.060'}), (p8:Professor{name:'Gabriele'})
                 CREATE
                   (p8)-[:EXAMINES]->(e1:Exam{date:'2026-06-30'})<-[:HAS_EXAM]-(l8),
                   (p8)-[:EXAMINES]->(e2:Exam{date:'2026-10-15'})<-[:HAS_EXAM]-(l8)
                 """);
 
-            //  Student → HEARS -> Lecture
-            session.run("""
+        //  Student → HEARS -> Lecture
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355001'})
                 MATCH (l1:Lecture{id:'351.011'}),(l2:Lecture{id:'353.067'}),
                       (l3:Lecture{id:'353.006'}),(l4:Lecture{id:'336.058'})
                 CREATE (s)-[:HEARS]->(l1),(s)-[:HEARS]->(l2),
                        (s)-[:HEARS]->(l3),(s)-[:HEARS]->(l4)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355002'})
                 MATCH (l1:Lecture{id:'351.011'}),(l2:Lecture{id:'353.067'}),
                       (l3:Lecture{id:'353.006'}),(l4:Lecture{id:'336.058'}),
@@ -175,35 +183,35 @@ public class DatabaseSeeder implements ApplicationRunner {
                        (s)-[:HEARS]->(l4),(s)-[:HEARS]->(l5),(s)-[:HEARS]->(l6),
                        (s)-[:HEARS]->(l7),(s)-[:HEARS]->(l8)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355004'})
                 MATCH (l5:Lecture{id:'351.039'}),(l6:Lecture{id:'338.010'}),
                       (l7:Lecture{id:'336.001'}),(l8:Lecture{id:'367.060'})
                 CREATE (s)-[:HEARS]->(l5),(s)-[:HEARS]->(l6),
                        (s)-[:HEARS]->(l7),(s)-[:HEARS]->(l8)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355005'})
                 MATCH (l1:Lecture{id:'351.011'}),(l3:Lecture{id:'353.006'}),
                       (l5:Lecture{id:'351.039'}),(l7:Lecture{id:'336.001'})
                 CREATE (s)-[:HEARS]->(l1),(s)-[:HEARS]->(l3),
                        (s)-[:HEARS]->(l5),(s)-[:HEARS]->(l7)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355006'})
                 MATCH (l2:Lecture{id:'353.067'}),(l4:Lecture{id:'336.058'}),
                       (l6:Lecture{id:'338.010'}),(l8:Lecture{id:'367.060'})
                 CREATE (s)-[:HEARS]->(l2),(s)-[:HEARS]->(l4),
                        (s)-[:HEARS]->(l6),(s)-[:HEARS]->(l8)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355007'})
                 MATCH (l1:Lecture{id:'351.011'}),(l2:Lecture{id:'353.067'}),
                       (l7:Lecture{id:'336.001'}),(l8:Lecture{id:'367.060'})
                 CREATE (s)-[:HEARS]->(l1),(s)-[:HEARS]->(l2),
                        (s)-[:HEARS]->(l7),(s)-[:HEARS]->(l8)
                 """);
-            session.run("""
+        session.run("""
                 MATCH (s:Student {matriculationNumber:'k12355008'})
                 MATCH (l3:Lecture{id:'353.006'}),(l4:Lecture{id:'336.058'}),
                       (l5:Lecture{id:'351.039'}),(l6:Lecture{id:'338.010'})
@@ -211,9 +219,9 @@ public class DatabaseSeeder implements ApplicationRunner {
                        (s)-[:HEARS]->(l5),(s)-[:HEARS]->(l6)
                 """);
 
-            // Student -> HAS_EXAM -> Registers -> Has_GRADE
-            // s1 (Luca)
-            session.run("""
+        // Student -> HAS_EXAM -> Registers -> Has_GRADE
+        // s1 (Luca)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355001'})
                 MATCH (l1:Lecture{id:'351.011'})-[:HAS_EXAM]->(e1:Exam{room:'HS 10',  date:'2026-01-20'})
                 MATCH (l1)                      -[:HAS_EXAM]->(e4:Exam{room:'HS 2',   date:'2026-03-28'})
@@ -228,8 +236,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e4a),(s)-[:HAS_GRADE{grade:3}]->(e4a)
                 """);
 
-            // s2 (Elvin)
-            session.run("""
+        // s2 (Elvin)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355002'})
                 MATCH (l1:Lecture{id:'351.011'})-[:HAS_EXAM]->(e4:Exam{room:'HS 2',   date:'2026-03-28'})
                 MATCH (l1)                      -[:HAS_EXAM]->(e5:Exam{room:'HS 1',   date:'2026-04-18'})
@@ -250,8 +258,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e8a),(s)-[:HAS_GRADE{grade:1}]->(e8a)
                 """);
 
-            // s4 (Sam)
-            session.run("""
+        // s4 (Sam)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355004'})
                 MATCH (l5:Lecture{id:'351.039'})-[:HAS_EXAM]->(e5a:Exam{date:'2026-06-26'})
                 MATCH (l6:Lecture{id:'338.010'})-[:HAS_EXAM]->(e6a:Exam{date:'2026-06-30'})
@@ -264,8 +272,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e8a)
                 """);
 
-            // s5 (Kim)
-            session.run("""
+        // s5 (Kim)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355005'})
                 MATCH (l1:Lecture{id:'351.011'})-[:HAS_EXAM]->(e4:Exam{room:'HS 2',  date:'2026-03-28'})
                 MATCH (l1)                      -[:HAS_EXAM]->(e5:Exam{room:'HS 1',  date:'2026-04-18'})
@@ -276,8 +284,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e5a),(s)-[:HAS_GRADE{grade:3}]->(e5a)
                 """);
 
-            // s6 (Alex)
-            session.run("""
+        // s6 (Alex)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355006'})
                 MATCH (l3:Lecture{id:'353.006'})-[:HAS_EXAM]->(e3c:Exam{room:'HS 2', date:'2026-01-18'})
                 MATCH (l4:Lecture{id:'336.058'})-[:HAS_EXAM]->(e4a:Exam{room:'HS 7'})
@@ -290,8 +298,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e8a),(s)-[:HAS_GRADE{grade:1}]->(e8a)
                 """);
 
-            // s7 (Han)
-            session.run("""
+        // s7 (Han)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355007'})
                 MATCH (l1:Lecture{id:'351.011'})-[:HAS_EXAM]->(e4:Exam{room:'HS 2',   date:'2026-03-28'})
                 MATCH (l1)                      -[:HAS_EXAM]->(e5:Exam{room:'HS 1',   date:'2026-04-18'})
@@ -306,8 +314,8 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e8b),(s)-[:HAS_GRADE{grade:3}]->(e8b)
                 """);
 
-            // s8 (Robin)
-            session.run("""
+        // s8 (Robin)
+        session.run("""
                 MATCH (s:Student{matriculationNumber:'k12355008'})
                 MATCH (l4:Lecture{id:'336.058'})-[:HAS_EXAM]->(e4a:Exam{room:'HS 7'})
                 MATCH (l5:Lecture{id:'351.039'})-[:HAS_EXAM]->(e5a:Exam{date:'2026-06-26'})
@@ -316,7 +324,6 @@ public class DatabaseSeeder implements ApplicationRunner {
                   (s)-[:REGISTERS]->(e5a),(s)-[:HAS_GRADE{grade:3}]->(e5a)
                 """);
 
-            log.info("Database seeding complete. Nodes created: students=8, professors=9, lectures=8.");
-        }
+        log.info("Database seeding complete. Nodes created: students=8, professors=9, lectures=8.");
     }
 }

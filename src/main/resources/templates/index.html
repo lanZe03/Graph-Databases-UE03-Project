@@ -1,11 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Student Graph DB</title>
+    <meta charset="UTF-8">
+    <title>StudentGraphDB</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<h1 th:text="${message}"></h1>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page-content">
+    <h1>StudentGraphDB</h1>
+    <p>Choose one of the available functions:</p>
+
+    <div class="card-list">
+        <div class="card">
+            <h2>Delete Student</h2>
+            <p>Delete a student and create a notification.</p>
+            <a th:href="@{/students/delete}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>Lecture Participants</h2>
+            <p>Show and update participants for a lecture.</p>
+            <a th:href="@{/lectures/participants}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>Lecture Search</h2>
+            <p>Search lectures by different fields.</p>
+            <a th:href="@{/lectures/search}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>Grade Student</h2>
+            <p>Grade a student for an exam.</p>
+            <a th:href="@{/exams/grade}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>People Connection</h2>
+            <p>Check whether two people are connected.</p>
+            <a th:href="@{/connections/people}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>Path Search</h2>
+            <p>Display all paths between two nodes.</p>
+            <a th:href="@{/connections/paths}">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>Notifications</h2>
+            <p>Show all notification nodes.</p>
+            <a th:href="@{/notifications}">Open</a>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>

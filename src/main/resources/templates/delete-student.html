@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Student</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page-content">
+    <h1>Delete Student</h1>
+
+    <h2>Current Students</h2>
+    <table th:if="${not #lists.isEmpty(students)}">
+        <thead>
+        <tr>
+            <th>Matriculation Number</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.matriculationNumber}"></td>
+            <td th:text="${student.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Delete by matriculation number</h2>
+    <form th:action="@{/students/delete/by-matriculation}" method="post">
+        <div>
+            <label for="matriculationNumber">Matriculation Number</label><br>
+            <input type="text" id="matriculationNumber" name="matriculationNumber" required>
+        </div>
+        <br>
+        <div>
+            <label for="reason1">Reason</label><br>
+            <input type="text" id="reason1" name="reason" required>
+        </div>
+        <br>
+        <button type="submit">Delete</button>
+    </form>
+
+    <h2>Delete by name</h2>
+    <form th:action="@{/students/delete/by-name}" method="post">
+        <div>
+            <label for="name">Name</label><br>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <br>
+        <div>
+            <label for="reason2">Reason</label><br>
+            <input type="text" id="reason2" name="reason" required>
+        </div>
+        <br>
+        <button type="submit">Delete</button>
+    </form>
+
+<!-- Some simple inline Javascript to show a popup with the message-->
+<script th:inline="javascript">
+    const message = [[${message != null}]] ? [[${message}]] : null;
+    if (message) {
+        alert(message);
+    }
+</script>>
+
+</body>
+</html>
