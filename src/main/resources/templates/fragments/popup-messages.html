@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="globalMessagePopup">
+    <div id="global-popup-message"
+         th:if="${message}"
+         th:attr="data-message=${message}"
+         hidden>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const popup = document.getElementById('global-popup-message');
+            if (popup) {
+                const message = popup.dataset.message;
+                if (message) {
+                    alert(message);
+                }
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

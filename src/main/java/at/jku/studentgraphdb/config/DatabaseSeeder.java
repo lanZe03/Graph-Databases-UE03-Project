@@ -43,7 +43,11 @@ public class DatabaseSeeder implements ApplicationRunner {
     }
 
     private void seedDatabase(Session session) {
-        log.info("Seeding Neo4j database...");
+        log.info("No students found. Clearing database before reseeding...");
+
+        session.run("MATCH (n) DETACH DELETE n");
+
+        log.info("Database cleared. Seeding Neo4j database...");
 
         // Students
         session.run("""

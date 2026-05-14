@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture Participants</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page-content">
+    <h1>Lecture Participants</h1>
+
+    <h2>Current Lectures</h2>
+    <table th:if="${not #lists.isEmpty(allLectures)}">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Topic</th>
+            <th>Ects</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="l: ${allLectures}">
+            <td th:text="${l.id}"></td>
+            <td th:text="${l.topic}"></td>
+            <td th:text="${l.ects}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Create New Lecture</h2>
+    <form th:action="@{/lectures/create}" method="post">
+        <div>
+            <label for="newLectureId">Lecture Number</label><br>
+            <input type="text" id="newLectureId" name="lectureId" required>
+        </div>
+        <br>
+        <div>
+            <label for="topic">Topic</label><br>
+            <input type="text" id="topic" name="topic" required>
+        </div>
+        <br>
+        <div>
+            <label for="ects">ECTS</label><br>
+            <input type="number" id="ects" name="ects">
+        </div>
+        <br>
+        <button type="submit">Create Lecture</button>
+    </form>
+
+    <h2>Load Lecture</h2>
+    <form th:action="@{/lectures/participants/search}" method="post">
+        <label for="lectureId">Lecture Number</label><br>
+        <input type="text" id="lectureId" name="lectureId" th:value="${selectedLectureId}" required>
+        <button type="submit">Load Participants</button>
+    </form>
+
+    <div th:if="${lecture}">
+        <h2>Lecture</h2>
+        <p><strong>ID:</strong> <span th:text="${lecture.id}"></span></p>
+        <p><strong>Topic:</strong> <span th:text="${lecture.topic}"></span></p>
+        <p><strong>ECTS:</strong> <span th:text="${lecture.ects}"></span></p>
+    </div>
+
+    <div th:if="${participants}">
+        <h2>Participants</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Matriculation Number</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${participants}">
+                <td th:text="${student.matriculationNumber}"></td>
+                <td th:text="${student.name}"></td>
+                <td>
+                    <form th:action="@{/lectures/participants/remove}" method="post">
+                        <input type="hidden" name="lectureId" th:value="${selectedLectureId}">
+                        <input type="hidden" name="matriculationNumber" th:value="${student.matriculationNumber}">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${selectedLectureId}">
+        <h2>Add Participant</h2>
+        <form th:action="@{/lectures/participants/add}" method="post">
+            <input type="hidden" name="lectureId" th:value="${selectedLectureId}">
+
+            <label for="matriculationNumber">Student</label><br>
+            <select id="matriculationNumber" name="matriculationNumber" required>
+                <option value="">Select a student</option>
+                <option th:each="student : ${allStudents}"
+                        th:value="${student.matriculationNumber}"
+                        th:text="${student.name + ' (' + student.matriculationNumber + ')'}">
+                </option>
+            </select>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/popup-messages :: globalMessagePopup}"></div>
+
+</body>
+</html>

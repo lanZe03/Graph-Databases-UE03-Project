@@ -2,11 +2,11 @@ package at.jku.studentgraphdb.controller;
 
 import at.jku.studentgraphdb.service.StudentService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/students")
@@ -19,28 +19,25 @@ public class StudentController {
     }
 
     @GetMapping("/delete")
-    public String showDeletePage(Model model) {
-        model.addAttribute("students", studentService.findAllStudents());
+    public String showDeletePage() {
         return "delete-student";
     }
 
     @PostMapping("/delete/by-matriculation")
     public String deleteByMatriculation(@RequestParam String matriculationNumber,
                                         @RequestParam String reason,
-                                        Model model) {
+                                        RedirectAttributes redirectAttributes) {
         String result = studentService.deleteStudentByMatriculationNumber(matriculationNumber, reason);
-        model.addAttribute("message", result);
-        model.addAttribute("students", studentService.findAllStudents());
-        return "delete-student";
+        redirectAttributes.addFlashAttribute("message", result);
+        return "redirect:/students/delete";
     }
 
     @PostMapping("/delete/by-name")
     public String deleteByName(@RequestParam String name,
                                @RequestParam String reason,
-                               Model model) {
+                               RedirectAttributes redirectAttributes) {
         String result = studentService.deleteStudentByName(name, reason);
-        model.addAttribute("message", result);
-        model.addAttribute("students", studentService.findAllStudents());
-        return "delete-student";
+        redirectAttributes.addFlashAttribute("message", result);
+        return "redirect:/students/delete";
     }
 }

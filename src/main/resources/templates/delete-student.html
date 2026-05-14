@@ -13,7 +13,7 @@
     <h1>Delete Student</h1>
 
     <h2>Current Students</h2>
-    <table th:if="${not #lists.isEmpty(students)}">
+    <table th:if="${not #lists.isEmpty(allStudents)}">
         <thead>
         <tr>
             <th>Matriculation Number</th>
@@ -21,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="student : ${students}">
+        <tr th:each="student : ${allStudents}">
             <td th:text="${student.matriculationNumber}"></td>
             <td th:text="${student.name}"></td>
         </tr>
@@ -58,13 +58,7 @@
         <button type="submit">Delete</button>
     </form>
 
-<!-- Some simple inline Javascript to show a popup with the message-->
-<script th:inline="javascript">
-    const message = [[${message != null}]] ? [[${message}]] : null;
-    if (message) {
-        alert(message);
-    }
-</script>>
+<div th:replace="~{fragments/popup-messages:: globalMessagePopup}"></div>
 
 </body>
 </html>

@@ -30,7 +30,6 @@ public class StudentService {
         Optional<Student> optionalStudent = studentRepository.findByMatriculationNumber(matriculationNumber);
 
         return optionalStudent.map(student -> deleteStudent(reason, student)).orElseGet(() -> "No student found with the matriculation number " + matriculationNumber);
-
     }
 
     @Transactional
@@ -52,6 +51,6 @@ public class StudentService {
                 .build();
 
         notificationRepository.save(notification);
-        return "Student " + student.getName() + " deleted";
+        return "Student " + student + " deleted";
     }
 }
