@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>People Connection</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+<div th:replace="~{fragments/popup-messages :: globalMessagePopup}"></div>
+
+<main class="page-content">
+    <h1>People Connection</h1>
+
+    <form th:action="@{/connections/people}" method="get">
+        <div>
+            <label for="nameA">Person A</label><br>
+            <input type="text" id="nameA" name="nameA" th:value="${nameA}" required>
+        </div>
+        <br>
+        <div>
+            <label for="nameB">Person B</label><br>
+            <input type="text" id="nameB" name="nameB" th:value="${nameB}" required>
+        </div>
+        <br>
+        <button type="submit">Check Connection</button>
+    </form>
+
+    <div th:if="${result}">
+        <h2>Result</h2>
+        <p th:text="${result}"></p>
+    </div>
+</main>
+
+</body>
+</html>

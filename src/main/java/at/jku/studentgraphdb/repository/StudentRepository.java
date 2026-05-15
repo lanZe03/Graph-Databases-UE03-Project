@@ -91,4 +91,11 @@ public interface StudentRepository extends Neo4jRepository<Student, String> {
                    @Param("examDate") String examDate,
                    @Param("examRoom") String examRoom,
                    @Param("grade") Long grade);
+
+    @Query("""
+        RETURN EXISTS(
+            (:Student {name: $nameA})-[:HEARS]->(:Lecture)<-[:HEARS]-(:Student {name: $nameB})
+        ) AS connected
+        """)
+    boolean areClassmates(@Param("nameA") String nameA, @Param("nameB") String nameB);
 }
