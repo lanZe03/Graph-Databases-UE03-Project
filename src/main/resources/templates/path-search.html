@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Path Search</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+<div th:replace="~{fragments/popup-messages :: globalMessagePopup}"></div>
+
+<main class="page-content">
+    <h1>How are A and B connected?</h1>
+
+    <form th:action="@{/connections/paths}" method="get">
+        <div>
+            <label for="fromValue">Node A</label><br>
+            <input type="text" id="fromValue" name="fromValue" th:value="${fromValue}"
+                   placeholder="Name, lecture id, room, date..." required>
+        </div>
+        <br>
+        <div>
+            <label for="toValue">Node B</label><br>
+            <input type="text" id="toValue" name="toValue" th:value="${toValue}"
+                   placeholder="Name, lecture id, room, date..." required>
+        </div>
+        <br>
+        <button type="submit">Find Paths</button>
+    </form>
+
+    <h2>Results</h2>
+
+    <table th:if="${paths != null and not #lists.isEmpty(paths)}">
+        <thead>
+        <tr>
+            <th>Length</th>
+            <th>Path</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="path : ${paths}">
+            <td th:text="${path.pathLength}"></td>
+            <td th:text="${path.pathText}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${paths != null and #lists.isEmpty(paths)}">
+        No path found between A and B.
+    </p>
+</main>
+
+</body>
+</html>
