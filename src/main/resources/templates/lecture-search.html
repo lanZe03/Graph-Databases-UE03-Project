@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture Search</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+<div th:replace="~{fragments/popup-messages:: globalMessagePopup}"></div>
+
+<main class="page-content">
+    <h1>Lecture Search</h1>
+
+    <form th:action="@{/lectures/search}" method="get">
+        <div>
+            <label for="q">Search string</label><br>
+            <input type="text"
+                   id="q"
+                   name="q"
+                   th:value="${searchText}"
+                   placeholder="Professor, lecture id, topic, room, date">
+        </div>
+        <br>
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    <h2>Results</h2>
+
+    <table th:if="${not #lists.isEmpty(lectures)}">
+        <thead>
+        <tr>
+            <th>Lecture ID</th>
+            <th>Topic</th>
+            <th>ECTS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lecture : ${lectures}">
+            <td th:text="${lecture.id}"></td>
+            <td th:text="${lecture.topic}"></td>
+            <td th:text="${lecture.ects}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(lectures)}">No lectures found.</p>
+</main>
+
+</body>
+</html>
