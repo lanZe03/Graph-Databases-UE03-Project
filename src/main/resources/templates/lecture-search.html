@@ -13,14 +13,14 @@
 <main class="page-content">
     <h1>Lecture Search</h1>
 
-    <form th:action="@{/lectures/search}" method="get">
+    <form method="get" th:action="@{/lectures/search}">
         <div>
             <label for="q">Search string</label><br>
-            <input type="text"
-                   id="q"
+            <input id="q"
                    name="q"
+                   placeholder="Professor, lecture id, topic, room, date"
                    th:value="${searchText}"
-                   placeholder="Professor, lecture id, topic, room, date">
+                   type="text">
         </div>
         <br>
         <button type="submit">Search</button>

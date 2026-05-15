@@ -31,29 +31,29 @@
     </table>
 
     <h2>Create New Lecture</h2>
-    <form th:action="@{/lectures/create}" method="post">
+    <form method="post" th:action="@{/lectures/create}">
         <div>
             <label for="newLectureId">Lecture Number</label><br>
-            <input type="text" id="newLectureId" name="lectureId" required>
+            <input id="newLectureId" name="lectureId" required type="text">
         </div>
         <br>
         <div>
             <label for="topic">Topic</label><br>
-            <input type="text" id="topic" name="topic" required>
+            <input id="topic" name="topic" required type="text">
         </div>
         <br>
         <div>
             <label for="ects">ECTS</label><br>
-            <input type="number" id="ects" name="ects">
+            <input id="ects" name="ects" type="number">
         </div>
         <br>
         <button type="submit">Create Lecture</button>
     </form>
 
     <h2>Load Lecture</h2>
-    <form th:action="@{/lectures/participants/search}" method="post">
+    <form method="post" th:action="@{/lectures/participants/search}">
         <label for="lectureId">Lecture Number</label><br>
-        <input type="text" id="lectureId" name="lectureId" th:value="${selectedLectureId}" required>
+        <input id="lectureId" name="lectureId" required th:value="${selectedLectureId}" type="text">
         <button type="submit">Load Participants</button>
     </form>
 
@@ -79,9 +79,9 @@
                 <td th:text="${student.matriculationNumber}"></td>
                 <td th:text="${student.name}"></td>
                 <td>
-                    <form th:action="@{/lectures/participants/remove}" method="post">
-                        <input type="hidden" name="lectureId" th:value="${selectedLectureId}">
-                        <input type="hidden" name="matriculationNumber" th:value="${student.matriculationNumber}">
+                    <form method="post" th:action="@{/lectures/participants/remove}">
+                        <input name="lectureId" th:value="${selectedLectureId}" type="hidden">
+                        <input name="matriculationNumber" th:value="${student.matriculationNumber}" type="hidden">
                         <button type="submit">Remove</button>
                     </form>
                 </td>
@@ -92,15 +92,15 @@
 
     <div th:if="${selectedLectureId}">
         <h2>Add Participant</h2>
-        <form th:action="@{/lectures/participants/add}" method="post">
-            <input type="hidden" name="lectureId" th:value="${selectedLectureId}">
+        <form method="post" th:action="@{/lectures/participants/add}">
+            <input name="lectureId" th:value="${selectedLectureId}" type="hidden">
 
             <label for="matriculationNumber">Student</label><br>
             <select id="matriculationNumber" name="matriculationNumber" required>
                 <option value="">Select a student</option>
                 <option th:each="student : ${allStudents}"
-                        th:value="${student.matriculationNumber}"
-                        th:text="${student.name + ' (' + student.matriculationNumber + ')'}">
+                        th:text="${student.name + ' (' + student.matriculationNumber + ')'}"
+                        th:value="${student.matriculationNumber}">
                 </option>
             </select>
             <button type="submit">Add</button>

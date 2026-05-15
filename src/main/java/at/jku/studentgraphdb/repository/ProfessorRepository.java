@@ -7,9 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProfessorRepository extends Neo4jRepository<Professor, String> {
     @Query("""
-        RETURN EXISTS(
-            (:Professor {name: $nameA})-[:TEACHES]->(:Lecture)<-[:TEACHES]-(:Professor {name: $nameB})
-        ) AS connected
-        """)
+            RETURN EXISTS(
+                (:Professor {name: $nameA})-[:TEACHES]->(:Lecture)<-[:TEACHES]-(:Professor {name: $nameB})
+            ) AS connected
+            """)
     boolean areColleagues(@Param("nameA") String nameA, @Param("nameB") String nameB);
 }

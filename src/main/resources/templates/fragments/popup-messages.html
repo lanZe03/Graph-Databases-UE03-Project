@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="globalMessagePopup">
-    <div id="global-popup-message"
-         th:if="${message}"
+    <div hidden
+         id="global-popup-message"
          th:attr="data-message=${message}"
-         hidden>
+         th:if="${message}">
     </div>
 
     <script>

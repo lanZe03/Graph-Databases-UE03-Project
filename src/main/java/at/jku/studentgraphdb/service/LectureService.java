@@ -26,7 +26,7 @@ public class LectureService {
     public List<Lecture> searchLecture(String searchString) {
         // if we have no search string,
         // we return all lectures, so the display is nice
-        if(searchString == null || searchString.isBlank()) {
+        if (searchString == null || searchString.isBlank()) {
             return lectureRepository.findAllByOrderByTopicAsc();
         }
         return lectureRepository.searchLectures(searchString);

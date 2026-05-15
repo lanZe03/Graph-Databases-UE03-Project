@@ -13,15 +13,15 @@
 <main class="page-content">
     <h1>People Connection</h1>
 
-    <form th:action="@{/connections/people}" method="get">
+    <form method="get" th:action="@{/connections/people}">
         <div>
             <label for="nameA">Person A</label><br>
-            <input type="text" id="nameA" name="nameA" th:value="${nameA}" required>
+            <input id="nameA" name="nameA" required th:value="${nameA}" type="text">
         </div>
         <br>
         <div>
             <label for="nameB">Person B</label><br>
-            <input type="text" id="nameB" name="nameB" th:value="${nameB}" required>
+            <input id="nameB" name="nameB" required th:value="${nameB}" type="text">
         </div>
         <br>
         <button type="submit">Check Connection</button>

@@ -12,17 +12,17 @@
 <main class="page-content">
     <h1>How are A and B connected?</h1>
 
-    <form th:action="@{/connections/paths}" method="get">
+    <form method="get" th:action="@{/connections/paths}">
         <div>
             <label for="fromValue">Node A</label><br>
-            <input type="text" id="fromValue" name="fromValue" th:value="${fromValue}"
-                   placeholder="Name, lecture id, room, date..." required>
+            <input id="fromValue" name="fromValue" placeholder="Name, lecture id, room, date..." required
+                   th:value="${fromValue}" type="text">
         </div>
         <br>
         <div>
             <label for="toValue">Node B</label><br>
-            <input type="text" id="toValue" name="toValue" th:value="${toValue}"
-                   placeholder="Name, lecture id, room, date..." required>
+            <input id="toValue" name="toValue" placeholder="Name, lecture id, room, date..." required
+                   th:value="${toValue}" type="text">
         </div>
         <br>
         <button type="submit">Find Paths</button>

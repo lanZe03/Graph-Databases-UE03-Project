@@ -29,38 +29,44 @@ public class PathService {
 
         // constrain the length of the paths to length of 6
         // to not execute very expensive queries
-        String query = """
-            MATCH (a), (b)
-            WHERE elementId(a) <> elementId(b)
-              AND (
-                    coalesce(a.name, '') = $fromValue
-                 OR coalesce(a.id, '') = $fromValue
-                 OR coalesce(a.matriculationNumber, '') = $fromValue
-                 OR coalesce(a.employeeNumber, '') = $fromValue
-                 OR coalesce(a.topic, '') = $fromValue
-                 OR coalesce(a.room, '') = $fromValue
-                 OR coalesce(a.date, '') = $fromValue
-              )
-              AND (
-                    coalesce(b.name, '') = $toValue
-                 OR coalesce(b.id, '') = $toValue
-                 OR coalesce(b.matriculationNumber, '') = $toValue
-                 OR coalesce(b.employeeNumber, '') = $toValue
-                 OR coalesce(b.topic, '') = $toValue
-                 OR coalesce(b.room, '') = $toValue
-                 OR coalesce(b.date, '') = $toValue
-              )
-            MATCH p = (a)-[*..6]-(b)
-            RETURN DISTINCT
-              reduce(txt = '', n IN nodes(p) |
-                txt +
-                CASE WHEN txt = '' THEN '' ELSE ' -> ' END +
-                coalesce(n.name, n.id, n.matriculationNumber, n.employeeNumber, n.topic, n.room, n.date, 'node')
-              ) AS pathText,
-              length(p) AS pathLength
-            ORDER BY pathLength ASC, pathText ASC
-            """;
 
+        // first, go through all possible properties to see if any match for A and B
+        // then get a Path between them
+        // finally return all distinct paths, with a nice -> between the text to get a nice output text
+        String query = """
+                MATCH (a), (b)
+                WHERE elementId(a) <> elementId(b)
+                  AND (
+                        coalesce(a.name, '') = $fromValue
+                     OR coalesce(a.id, '') = $fromValue
+                     OR coalesce(a.matriculationNumber, '') = $fromValue
+                     OR coalesce(a.employeeNumber, '') = $fromValue
+                     OR coalesce(a.topic, '') = $fromValue
+                     OR coalesce(a.room, '') = $fromValue
+                     OR coalesce(a.date, '') = $fromValue
+                  )
+                  AND (
+                        coalesce(b.name, '') = $toValue
+                     OR coalesce(b.id, '') = $toValue
+                     OR coalesce(b.matriculationNumber, '') = $toValue
+                     OR coalesce(b.employeeNumber, '') = $toValue
+                     OR coalesce(b.topic, '') = $toValue
+                     OR coalesce(b.room, '') = $toValue
+                     OR coalesce(b.date, '') = $toValue
+                  )
+                MATCH p = (a)-[*..6]-(b)
+                RETURN DISTINCT
+                  reduce(txt = '', n IN nodes(p) |
+                    txt +
+                    CASE WHEN txt = '' THEN '' ELSE ' -> ' END +
+                    coalesce(n.name, n.id, n.matriculationNumber, n.employeeNumber, n.topic, n.room, n.date, 'node')
+                  ) AS pathText,
+                  length(p) AS pathLength
+                ORDER BY pathLength ASC, pathText ASC
+                """;
+
+        // Map each return path to a Path Object using the mapping function
+        // then return all of them
         return (List<Path>) neo4jClient.query(query)
                 .bindAll(Map.of("fromValue", fromValue.trim(), "toValue", toValue.trim()))
                 .fetchAs(Path.class)

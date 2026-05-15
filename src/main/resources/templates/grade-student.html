@@ -14,9 +14,9 @@
     <h1>Grade Student</h1>
 
     <h2>Search Student</h2>
-    <form th:action="@{/exams/grade}" method="get">
+    <form method="get" th:action="@{/exams/grade}">
         <label for="studentSearch">Student name or matriculation number</label><br>
-        <input type="text" id="studentSearch" name="studentSearch" th:value="${studentSearch}">
+        <input id="studentSearch" name="studentSearch" th:value="${studentSearch}" type="text">
         <button type="submit">Search</button>
     </form>
 
@@ -74,11 +74,12 @@
                 <td th:text="${exam.examRoom}"></td>
                 <td th:text="${exam.currentGrade}"></td>
                 <td>
-                    <form th:action="@{/exams/grade/save}" method="post">
-                        <input type="hidden" name="matriculationNumber" th:value="${selectedStudent.matriculationNumber}">
-                        <input type="hidden" name="lectureId" th:value="${exam.lectureId}">
-                        <input type="hidden" name="examDate" th:value="${exam.examDate}">
-                        <input type="hidden" name="examRoom" th:value="${exam.examRoom}">
+                    <form method="post" th:action="@{/exams/grade/save}">
+                        <input name="matriculationNumber" th:value="${selectedStudent.matriculationNumber}"
+                               type="hidden">
+                        <input name="lectureId" th:value="${exam.lectureId}" type="hidden">
+                        <input name="examDate" th:value="${exam.examDate}" type="hidden">
+                        <input name="examRoom" th:value="${exam.examRoom}" type="hidden">
                         <select name="grade" required>
                             <option value="">Select</option>
                             <option value="1">1</option>

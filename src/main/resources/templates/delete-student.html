@@ -29,36 +29,37 @@
     </table>
 
     <h2>Delete by matriculation number</h2>
-    <form th:action="@{/students/delete/by-matriculation}" method="post">
+    <form method="post" th:action="@{/students/delete/by-matriculation}">
         <div>
             <label for="matriculationNumber">Matriculation Number</label><br>
-            <input type="text" id="matriculationNumber" name="matriculationNumber" required>
+            <input id="matriculationNumber" name="matriculationNumber" required type="text">
         </div>
         <br>
         <div>
             <label for="reason1">Reason</label><br>
-            <input type="text" id="reason1" name="reason" required>
+            <input id="reason1" name="reason" required type="text">
         </div>
         <br>
         <button type="submit">Delete</button>
     </form>
 
     <h2>Delete by name</h2>
-    <form th:action="@{/students/delete/by-name}" method="post">
+    <form method="post" th:action="@{/students/delete/by-name}">
         <div>
             <label for="name">Name</label><br>
-            <input type="text" id="name" name="name" required>
+            <input id="name" name="name" required type="text">
         </div>
         <br>
         <div>
             <label for="reason2">Reason</label><br>
-            <input type="text" id="reason2" name="reason" required>
+            <input id="reason2" name="reason" required type="text">
         </div>
         <br>
         <button type="submit">Delete</button>
     </form>
 
-<div th:replace="~{fragments/popup-messages:: globalMessagePopup}"></div>
+    <div th:replace="~{fragments/popup-messages:: globalMessagePopup}"></div>
 
+</main>
 </body>
 </html>

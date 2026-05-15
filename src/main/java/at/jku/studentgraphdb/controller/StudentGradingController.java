@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/exams")
-public class StudentGradingController{
+public class StudentGradingController {
 
     private final StudentGradingService studentGradingService;
     private final StudentService studentService;

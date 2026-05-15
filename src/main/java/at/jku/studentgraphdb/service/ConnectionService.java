@@ -15,15 +15,15 @@ public class ConnectionService {
     }
 
     public String findPeopleConnection(String nameA, String nameB) {
-        if(nameA == null || nameA.isBlank() ||  nameB == null || nameB.isBlank()) {
+        if (nameA == null || nameA.isBlank() || nameB == null || nameB.isBlank()) {
             return "Please provide both names";
         }
 
-        if(studentRepository.areClassmates(nameA, nameB)) {
+        if (studentRepository.areClassmates(nameA, nameB)) {
             return nameA + " and " + nameB + " are classmates";
         }
 
-        if(professorRepository.areColleagues(nameA, nameB)) {
+        if (professorRepository.areColleagues(nameA, nameB)) {
             return nameA + " and " + nameB + " are colleagues";
         }
 

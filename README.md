@@ -37,6 +37,7 @@ This gets seeded with the given test-data on startup.
 ```bash
 mvn spring-boot:run
 ```
+or open the StudentGraphDbApplication.java and press Start when using any modern IDE (IntelliJ.. )
 
 4. Open the app in the browser:
 
@@ -60,7 +61,3 @@ http://localhost:8080
 - `src/main/resources/templates` - Thymeleaf templates
 - `src/main/resources/static/css` - CSS files
 - `src/main/resources/static` - static assets
-
-## Notes
-
-- The project uses Thymeleaf fragments for shared header, and popup components.

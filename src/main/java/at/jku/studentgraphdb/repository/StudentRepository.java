@@ -46,46 +46,46 @@ public interface StudentRepository extends Neo4jRepository<Student, String> {
                                   @Param("lectureId") String lectureId);
 
     @Query("""
-        MATCH (s:Student)
-        WHERE toLower(s.name) CONTAINS toLower($search)
-           OR toLower(s.matriculationNumber) CONTAINS toLower($search)
-        RETURN s
-        ORDER BY s.name ASC
-        """)
+            MATCH (s:Student)
+            WHERE toLower(s.name) CONTAINS toLower($search)
+               OR toLower(s.matriculationNumber) CONTAINS toLower($search)
+            RETURN s
+            ORDER BY s.name ASC
+            """)
     List<Student> searchStudents(@Param("search") String search);
 
     @Query("""
-        MATCH (s:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->(e:Exam)
-        MATCH (l:Lecture)-[:HAS_EXAM]->(e)
-        OPTIONAL MATCH (s)-[g:HAS_GRADE]->(e)
-        RETURN
-            l.id AS lectureId,
-            l.topic AS lectureTopic,
-            e.date AS examDate,
-            e.room AS examRoom,
-            g.grade AS currentGrade,
-            (coalesce(l.id,'') + '|' + coalesce(e.date,'') + '|' + coalesce(e.room,'')) AS examKey
-        ORDER BY l.id ASC, e.date ASC, e.room ASC
-        """)
+            MATCH (s:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->(e:Exam)
+            MATCH (l:Lecture)-[:HAS_EXAM]->(e)
+            OPTIONAL MATCH (s)-[g:HAS_GRADE]->(e)
+            RETURN
+                l.id AS lectureId,
+                l.topic AS lectureTopic,
+                e.date AS examDate,
+                e.room AS examRoom,
+                g.grade AS currentGrade,
+                (coalesce(l.id,'') + '|' + coalesce(e.date,'') + '|' + coalesce(e.room,'')) AS examKey
+            ORDER BY l.id ASC, e.date ASC, e.room ASC
+            """)
     List<StudentExam> findRegisteredExams(@Param("matriculationNumber") String matriculationNumber);
 
     @Query("""
-        RETURN EXISTS(
-            (:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->
-            (:Exam)<-[:HAS_EXAM]-(:Lecture {id: $lectureId})
-        ) AS registered
-        """)
+            RETURN EXISTS(
+                (:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->
+                (:Exam)<-[:HAS_EXAM]-(:Lecture {id: $lectureId})
+            ) AS registered
+            """)
     boolean isStudentRegisteredForLectureExam(@Param("matriculationNumber") String matriculationNumber,
                                               @Param("lectureId") String lectureId);
 
     @Query("""
-        MATCH (s:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->(e:Exam)
-        MATCH (l:Lecture {id: $lectureId})-[:HAS_EXAM]->(e)
-        WHERE coalesce(e.date,'') = coalesce($examDate,'')
-          AND coalesce(e.room,'') = coalesce($examRoom,'')
-        MERGE (s)-[g:HAS_GRADE]->(e)
-        SET g.grade = $grade
-        """)
+            MATCH (s:Student {matriculationNumber: $matriculationNumber})-[:REGISTERS]->(e:Exam)
+            MATCH (l:Lecture {id: $lectureId})-[:HAS_EXAM]->(e)
+            WHERE coalesce(e.date,'') = coalesce($examDate,'')
+              AND coalesce(e.room,'') = coalesce($examRoom,'')
+            MERGE (s)-[g:HAS_GRADE]->(e)
+            SET g.grade = $grade
+            """)
     void saveGrade(@Param("matriculationNumber") String matriculationNumber,
                    @Param("lectureId") String lectureId,
                    @Param("examDate") String examDate,
@@ -93,9 +93,9 @@ public interface StudentRepository extends Neo4jRepository<Student, String> {
                    @Param("grade") Long grade);
 
     @Query("""
-        RETURN EXISTS(
-            (:Student {name: $nameA})-[:HEARS]->(:Lecture)<-[:HEARS]-(:Student {name: $nameB})
-        ) AS connected
-        """)
+            RETURN EXISTS(
+                (:Student {name: $nameA})-[:HEARS]->(:Lecture)<-[:HEARS]-(:Student {name: $nameB})
+            ) AS connected
+            """)
     boolean areClassmates(@Param("nameA") String nameA, @Param("nameB") String nameB);
 }
