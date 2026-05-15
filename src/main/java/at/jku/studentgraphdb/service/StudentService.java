@@ -25,6 +25,17 @@ public class StudentService {
         return studentRepository.findAllByOrderByNameAsc();
     }
 
+    public List<Student> searchStudents(String search) {
+        if (search == null || search.isBlank()) {
+            return studentRepository.findAllByOrderByNameAsc();
+        }
+        return studentRepository.searchStudents(search.trim());
+    }
+
+    public Optional<Student> findStudentById(String matriculationNumber) {
+        return studentRepository.findByMatriculationNumber(matriculationNumber);
+    }
+
     @Transactional
     public String deleteStudentByMatriculationNumber(String matriculationNumber, String reason) {
         Optional<Student> optionalStudent = studentRepository.findByMatriculationNumber(matriculationNumber);

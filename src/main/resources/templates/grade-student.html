@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Grade Student</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+<div th:replace="~{fragments/popup-messages:: globalMessagePopup}"></div>
+
+<main class="page-content">
+    <h1>Grade Student</h1>
+
+    <h2>Search Student</h2>
+    <form th:action="@{/exams/grade}" method="get">
+        <label for="studentSearch">Student name or matriculation number</label><br>
+        <input type="text" id="studentSearch" name="studentSearch" th:value="${studentSearch}">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Students</h2>
+    <table th:if="${not #lists.isEmpty(students)}">
+        <thead>
+        <tr>
+            <th>Matriculation Number</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.matriculationNumber}"></td>
+            <td th:text="${student.name}"></td>
+            <td>
+                <a th:href="@{/exams/grade(matriculationNumber=${student.matriculationNumber}, studentSearch=${studentSearch})}">
+                    Select
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(students)}">No students found.</p>
+
+    <div th:if="${selectedStudent}">
+        <h2>Selected Student</h2>
+        <p>
+            <strong>Name:</strong>
+            <span th:text="${selectedStudent.name}"></span>
+            <br>
+            <strong>Matriculation Number:</strong>
+            <span th:text="${selectedStudent.matriculationNumber}"></span>
+        </p>
+
+        <h2>Registered Exams</h2>
+        <table th:if="${not #lists.isEmpty(registeredExams)}">
+            <thead>
+            <tr>
+                <th>Lecture ID</th>
+                <th>Lecture Topic</th>
+                <th>Date</th>
+                <th>Room</th>
+                <th>Current Grade</th>
+                <th>New Grade</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exam : ${registeredExams}">
+                <td th:text="${exam.lectureId}"></td>
+                <td th:text="${exam.lectureTopic}"></td>
+                <td th:text="${exam.examDate}"></td>
+                <td th:text="${exam.examRoom}"></td>
+                <td th:text="${exam.currentGrade}"></td>
+                <td>
+                    <form th:action="@{/exams/grade/save}" method="post">
+                        <input type="hidden" name="matriculationNumber" th:value="${selectedStudent.matriculationNumber}">
+                        <input type="hidden" name="lectureId" th:value="${exam.lectureId}">
+                        <input type="hidden" name="examDate" th:value="${exam.examDate}">
+                        <input type="hidden" name="examRoom" th:value="${exam.examRoom}">
+                        <select name="grade" required>
+                            <option value="">Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit">Save</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p th:if="${#lists.isEmpty(registeredExams)}">
+            This student is not registered for any exams.
+        </p>
+    </div>
+</main>
+
+</body>
+</html>
