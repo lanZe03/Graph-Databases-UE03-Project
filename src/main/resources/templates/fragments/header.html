@@ -2,19 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <header th:fragment="siteHeader" class="site-header">
-    <div class="nav-inner">
-        <a th:href="@{/}" class="brand">StudentGraphDB</a>
-        <nav class="nav-links">
-            <a th:href="@{/}">Home</a>
-            <a th:href="@{/students/delete}">Delete Student</a>
-            <a th:href="@{/lectures/participants}">Participants</a>
-            <a th:href="@{/lectures/search}">Lecture Search</a>
-            <a th:href="@{/exams/grade}">Grade Student</a>
-            <a th:href="@{/connections/people}">People Connection</a>
-            <a th:href="@{/connections/paths}">Paths</a>
-            <a th:href="@{/notifications}">Notifications</a>
-        </nav>
-    </div>
+    <nav class="nav-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/students/delete}">Delete Student</a>
+        <a th:href="@{/lectures/participants}">Participants</a>
+        <a th:href="@{/lectures/search}">Lecture Search</a>
+        <a th:href="@{/exams/grade}">Grade Student</a>
+        <a th:href="@{/connections/people}">People Connection</a>
+        <a th:href="@{/connections/paths}">Paths</a>
+        <a th:href="@{/notifications}">Notifications</a>
+    </nav>
 </header>
 </body>
 </html>
